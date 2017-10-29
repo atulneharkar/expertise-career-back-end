@@ -1,5 +1,6 @@
 import { ObjectID } from 'mongodb';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 import User from './../../src/models/user';
 import dbConnection from './../../src/db/mongoose';
@@ -11,7 +12,7 @@ const users = [{
 	_id: userOneId,
   name: 'Atul',
 	email: 'atul@gmail.com',
-	password: 'abc',
+	password: 'Atul@2017',
   phone: '8767067878',
   designation: 'Consultant',
   role: 'admin',
@@ -28,7 +29,7 @@ const users = [{
   _id: userTwoId,
   name: 'Manish',
   email: 'manish@gmail.com',
-  password: 'abc',
+  password: 'Atul@2017',
   phone: '8424959895',
   designation: 'Consultant',
   role: 'user',
@@ -44,16 +45,15 @@ const users = [{
 
 const populateUsers = (done) => {
   User.remove({}).then(() => {
-    return User.insertMany(users);
-  })
-  // .then(() => {
-  //   const userOne = new User(users[0]).save();
-  //   const userTwo = new User(users[1]).save();
+    const userOne = new User(users[0]).save();
+    const userTwo = new User(users[1]).save();
 
-  //   return Promise.all([userOne, userTwo]);
-  // })
+    return Promise.all([userOne, userTwo]);
+  })
   .then(() => done())
-  .catch(err => {console.log(err);done(err);});
+  .catch(err => {
+    done(err);
+  });
 };
 
 module.exports = { users, populateUsers }; 

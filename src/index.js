@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 import config from './config/config';
+import redisClient from './config/redis';
 import routes from './routes/';
 import dbConnection from './db/mongoose';
 import { corsOptions } from './config/cors';
@@ -46,6 +47,10 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 // /* all application routes */
 app.use(routes);
 
-app.listen(port, () => {
-  console.log(`App started at port ${port}`);
-});
+if(!module.parent){ 
+	app.listen(port, () => {
+	  console.log(`App started at port ${port}`);
+	});
+}
+
+module.exports = app;

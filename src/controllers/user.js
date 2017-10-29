@@ -1,10 +1,11 @@
 import fs from 'fs';
 import path from 'path';
-import moment from 'moment';
 import _ from 'lodash';
+import moment from 'moment';
 
 import User from '../models/user';
 import config from '../config/config';
+import redisClient from '../config/redis';
 import { hashData } from '../helpers/encryption';
 
 /**
@@ -35,15 +36,15 @@ export const createUser = (req, res) => {
  * controller to get current user info
  * GET /user/me
  */
-export const getUser = (req, res) => {
+// export const getUser = (req, res) => {
 
-  /**
-   * since everything already been done through middleware
-   * check isAuthorized middleware which finds the user info based on token
-   * and assign it to req object
-   */
-  res.send(req.user);
-};
+//   *
+//    * since everything already been done through middleware
+//    * check isAuthorized middleware which finds the user info based on token
+//    * and assign it to req object
+   
+//   res.send(req.user);
+// };
 
 /**
  * controller to get specific users info
@@ -98,11 +99,23 @@ export const updateUser = (req, res) => {
 
   hashData(password)
     .then(hashedPassword => {
+      
+      return new Promise((resolve, reject) => {
+        if(hashedPassword) {
+          userUpdatedData.password = hashedPassword;
+        }
 
-      if(hashedPassword) {
-        userUpdatedData.password = hashedPassword;
-      }
-
+        if(userDataToBeUpdated.status && userDataToBeUpdated.status !== 'active') {
+          /* for key operations we need to add prefix manually */
+          redisClient.del(`auth:${userID}`, (err) => {
+            resolve();
+          });
+        } else {
+          resolve();
+        }
+      });
+    })
+    .then(() => {
       return User.findByIdAndUpdate(userID, {
         '$set': userUpdatedData
       }, {

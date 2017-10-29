@@ -5,12 +5,12 @@ import uniqueValidator from 'mongoose-unique-validator';
 import _ from 'lodash';
 import moment from 'moment';
 import otpGenerator from 'otp-generator';
-import config from '../config/config';
 
+import config from '../config/config';
+import redisClient from '../config/redis';
 import {
   hashData
 } from '../helpers/encryption';
-
 import {
   isValidName,
   isValidEmail,
@@ -77,7 +77,7 @@ const userSchema = new mongoose.Schema({
     'enum': {
       'values': ['active', 'inactive', 'pending']
     },
-    'default': 'pending'
+    'default': 'active'
   },
   'dob': {
     'type': Date,
@@ -149,10 +149,17 @@ userSchema.methods.generateAuthToken = function() {
   const access = 'auth';
   const token = jwt.sign({ _id: user._id.toHexString(), access}, config.AUTH_KEY).toString();
 
-  user.tokens.push({ access, token });
+  //add token in redis
+  return new Promise((resolve, reject) => {
 
-  return user.save().then(() => {
-    return token;
+    /* put token into redis */
+    redisClient.sadd(`auth:${user._id}`, token, err => {
+      if(err) {
+        reject();
+      }
+
+      return resolve(token);
+    });
   });
 };
 
@@ -161,15 +168,15 @@ userSchema.methods.generateAuthToken = function() {
  * function - required 'this'
  * @param {String} token [user token]
  */
-userSchema.methods.removeToken = function(token) {
-  const user = this;
+// userSchema.methods.removeToken = function(token) {
+//   const user = this;
 
-  return user.update({
-    $pull: {
-      tokens: { token }
-    }
-  });
-};
+//   return user.update({
+//     $pull: {
+//       tokens: { token }
+//     }
+//   });
+// };
 
 /**
  * instance method to generate otp
@@ -218,7 +225,8 @@ userSchema.methods.verifyOTPAndResetPassword = function(providedOTP, newPassword
  */
 userSchema.statics.findUserByToken = function(token) {
   const user = this;
-  var decode = null;
+  let decode = null;
+  const skipFields = ['password', '__v', 'tokens'];
 
   if(!token) {
     return Promise.reject({'status': 401});
@@ -230,7 +238,16 @@ userSchema.statics.findUserByToken = function(token) {
     return Promise.reject({'status': 401});
   }
 
-  return user.findOne({'_id': decode._id});
+  /* check whether token is present in redis or not */
+  return new Promise((resolve, reject) => {
+    redisClient.sismember(`auth:${decode._id}`, token, (err, data) => {
+      if(err) {
+        reject();
+      }
+
+      resolve(_.omit(decode, skipFields));
+    });
+  });
 };
 
 /**

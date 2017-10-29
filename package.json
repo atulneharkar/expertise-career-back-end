@@ -61,6 +61,7 @@
     "passport-google-oauth": "^1.0.0",
     "passport-linkedin": "^1.0.0",
     "passport-twitter": "^1.0.4",
+    "redis": "^2.8.0",
     "validator": "^8.2.0"
   }
 }

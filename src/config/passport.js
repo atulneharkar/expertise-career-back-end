@@ -1,9 +1,9 @@
 // load all the things we need
-var FacebookStrategy = require('passport-facebook').Strategy;
-var TwitterStrategy  = require('passport-twitter').Strategy;
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var LinkedInStrategy = require('passport-linkedin');
-var GithubStrategy = require('passport-github');
+const FacebookStrategy = require('passport-facebook').Strategy;
+const TwitterStrategy  = require('passport-twitter').Strategy;
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const LinkedInStrategy = require('passport-linkedin');
+const GithubStrategy = require('passport-github');
 
 // load up the user model
 import User from '../models/user';

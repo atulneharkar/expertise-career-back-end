@@ -7,7 +7,8 @@ import express from 'express';
 
 import User from './../../src/models/user';
 const { users, populateUsers } = require('./../seed/seed');
-const app = express();
+
+const app = require('./../../src');
 
 beforeEach(populateUsers);
 
@@ -93,5 +94,49 @@ describe('POST /user', () => {
 			.send(dummyUser)
 			.expect(400)
 			.end(done);
+	});
+});
+
+describe('GET /user/:id', () => {
+  it('should return user if found in database', (done) => {
+
+  });
+
+  it('should return 404 error if user not found', (done) => {
+  	
+  });
+
+  it('should return 400 error if userId is empty', (done) => {
+  	
+  });
+});
+
+describe('GET /user/list', () => {
+	it('should return list of all users', (done) => {
+
+	});
+});
+
+describe('PUT /user/:id', () => {
+	it('should create a user', (done) => {
+
+	});
+
+	it('should return validation errors if request invalid', (done) => {
+
+	});
+
+	it('should not update user if email and phone no in use by other users', (done) => {
+
+	});
+});
+
+describe('POST /user/avatar', () => {
+	it('should set avatar url in database and add new avatar file in /uploads/avatar folder and unlink the old file', (done) => {
+
+	});
+
+	it('should send 400 error if avatar is not set properly', (done) => {
+
 	});
 });

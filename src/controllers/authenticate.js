@@ -2,6 +2,7 @@ import moment from 'moment';
 import _ from 'lodash';
 
 import User from '../models/user';
+import redisClient from '../config/redis';
 
 /**
  * controller for user login
@@ -24,10 +25,14 @@ export const login = (req, res) => {
  * DELETE /user/logout
  */
 export const logout = (req, res) => {
-  req.user.removeToken(req.token).then(() => {
+  const token = req.header('x-auth');
+
+  redisClient.srem(`auth:${req.user._id}`, [token], err => {
+    if(err) {
+      res.status(400).send('Unable to logout');
+    }
+
     res.status(200).send();
-  }, () => {
-    res.status(400).send();
   });
 };
 
