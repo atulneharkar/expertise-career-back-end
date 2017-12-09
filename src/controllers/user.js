@@ -105,7 +105,7 @@ export const updateUser = (req, res) => {
           userUpdatedData.password = hashedPassword;
         }
 
-        if(userDataToBeUpdated.status && userDataToBeUpdated.status !== 'active') {
+        if(userUpdatedData.status && userUpdatedData.status !== 'active') {
           /* for key operations we need to add prefix manually */
           redisClient.del(`auth:${userID}`, (err) => {
             resolve();
@@ -131,7 +131,7 @@ export const updateUser = (req, res) => {
 
       res.status(200).send(user);
     })
-    .catch(err => {
+    .catch(err => {console.log(err);
       res.status(400).send(err);
     });
 };

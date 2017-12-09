@@ -59,9 +59,7 @@ const userSchema = new mongoose.Schema({
     'trim': true,
     //'required': [true, 'Please enter your designation']
   },
-  'avatar': {
-    'type': String
-  },
+  'avatar': {},
   'role': {
     'type': String,
     'trim': true,
@@ -91,16 +89,6 @@ const userSchema = new mongoose.Schema({
   'otpExpire': {
     'type': Date
   },
-  'tokens': [{
-    'access': {
-      'type': String,
-      'required': true
-    },
-    'token': {
-      'type': String,
-      'required': true
-    }
-  }],
   'google': {
     'id': String,
     'name': String,
@@ -134,7 +122,7 @@ const userSchema = new mongoose.Schema({
 userSchema.methods.toJSON = function() {
   const user = this;
   const userObject = user.toObject();
-  const skipFields = ['password', '__v', 'tokens'];
+  const skipFields = ['password', '__v'];
 
   return _.omit(userObject, skipFields);
 };
