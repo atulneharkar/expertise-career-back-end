@@ -18,7 +18,7 @@ const applicationPublicConfig = {
  */
 const commonConfigAcrossAllEnv = {
   'OTP_EXPIRY_TIME': 2, /* in hours */
-  'REDIS_KEY': 'photography:' /* unique seperator to distinguish redis key */
+  'REDIS_KEY': 'expertisecareer:' /* unique seperator to distinguish redis key */
 };
 
 /**

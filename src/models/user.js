@@ -54,17 +54,12 @@ const userSchema = new mongoose.Schema({
     'type': String,
     //'required': [true, 'Please enter your password']
   },
-  'designation': {
-    'type': String,
-    'trim': true,
-    //'required': [true, 'Please enter your designation']
-  },
   'avatar': {},
   'role': {
     'type': String,
     'trim': true,
     'enum': {
-      'values': ['admin', 'photographer', 'user'],
+      'values': ['admin', 'user'],
       'message': 'Please enter a valid user role'
     },
     //'required': [true, 'Please enter your role'],
@@ -76,10 +71,6 @@ const userSchema = new mongoose.Schema({
       'values': ['active', 'inactive', 'pending']
     },
     'default': 'active'
-  },
-  'dob': {
-    'type': Date,
-    //'required': [true, 'Please enter date of birth']
   },
   'otp': {
     'type': String,
@@ -150,21 +141,6 @@ userSchema.methods.generateAuthToken = function() {
     });
   });
 };
-
-/**
- * model funtion to remove users token
- * function - required 'this'
- * @param {String} token [user token]
- */
-// userSchema.methods.removeToken = function(token) {
-//   const user = this;
-
-//   return user.update({
-//     $pull: {
-//       tokens: { token }
-//     }
-//   });
-// };
 
 /**
  * instance method to generate otp

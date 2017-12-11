@@ -25,13 +25,6 @@ const userRoutes = express.Router();
 userRoutes.post('/create', createUser);
 
 /**
- * route to get current user info
- * This is imp since token might does not have latest user info
- * GET /user/me
- */
-// userRoutes.get('/me', isAuthorizedUser, verifyAgainstDB, getUser);
-
-/**
  * route to get specific user's info
  * GET /user/:id
  */

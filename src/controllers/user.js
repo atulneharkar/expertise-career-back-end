@@ -17,9 +17,7 @@ export const createUser = (req, res) => {
     'name': req.body.name,
     'email': req.body.email,
     'phone': req.body.phone,
-    'designation': req.body.designation,
     'password': req.body.password,
-    'dob': req.body.dob ? moment(req.body.dob).toDate() : null,
     'role': req.body.role || 'user'
   }); 
 
@@ -31,20 +29,6 @@ export const createUser = (req, res) => {
     res.status(400).send(e);
   });
 };
-
-/**
- * controller to get current user info
- * GET /user/me
- */
-// export const getUser = (req, res) => {
-
-//   *
-//    * since everything already been done through middleware
-//    * check isAuthorized middleware which finds the user info based on token
-//    * and assign it to req object
-   
-//   res.send(req.user);
-// };
 
 /**
  * controller to get specific users info

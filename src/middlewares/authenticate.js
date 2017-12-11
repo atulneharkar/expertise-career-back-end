@@ -22,23 +22,3 @@ export const isAuthorizedUser = (req, res, next) => {
       res.status(401).send('Unauthorized, Please login');
     });
 };
-
-/**
- * middleware to verify user info against database
- * specifically user status
- * this middleware must pass through isAuthorizedUser,
- * since we are not doing token check here, also middleware expect user infor in req
- */
-// export const verifyAgainstDB = (req, res, next) => {
-//   User.findById(req.user._id)
-//     .then(user => {
-//       if(user && user.status !== 'active' || !user) {
-//         return Promise.reject({'status': 401});
-//       }
-
-//       next();
-//     })
-//     .catch(err => {
-//       res.status(401).send('Unauthorized, Please login');
-//     });
-// };
