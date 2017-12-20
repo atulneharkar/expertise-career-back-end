@@ -21,6 +21,63 @@ export const login = (req, res) => {
 };
 
 /**
+ * controller for user login-social (facebook and google)
+ * POST /user/login-social
+ */
+export const loginSocial = (req, res) => {
+  const body = _.pick(req.body, ['email', 'name', 'avatar', 'loginType']);
+
+  User.findUserBySocialCredentials(body.email).then((user) => {
+    if(!user) {
+      let userInfo = {
+        'name': body.name,
+        'email': body.email,
+        'avatar': body.avatar,
+        'role': 'user'
+      }
+      if(body.loginType === 'facebook') {
+        userInfo['facebook'] = true;
+      } else if(body.loginType === 'google') {
+        userInfo['google'] = true;
+      }
+
+      let user = new User(userInfo); 
+
+      user.save().then(() => {
+        return user.generateAuthToken();
+      }).then((token) => {
+        res.header('x-auth', token).send(user);
+      });
+    } else if(user && user[body.loginType] === false) {
+      const userID = user._id;
+      const userUpdatedData = { [body.loginType]: true };
+      
+      return User.findByIdAndUpdate(userID, {
+        '$set': userUpdatedData
+      }, {
+        'new': true,
+        'runValidators': true,
+        'context': 'query'
+      })
+      .then(user => {
+        if(!user) {
+          return Promise.reject({'status': 401});
+        }
+        return user.generateAuthToken();
+      }).then((token) => {
+        res.header('x-auth', token).send(user);
+      });
+    } else {
+      return user.generateAuthToken().then((token) => {
+        res.header('x-auth', token).send(user);
+      });
+    }
+  }).catch((e) => {
+    res.status(400).send(e);
+  });
+};
+
+/**
  * controller for user logout
  * DELETE /user/logout
  */

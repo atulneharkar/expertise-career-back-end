@@ -81,29 +81,12 @@ const userSchema = new mongoose.Schema({
     'type': Date
   },
   'google': {
-    'id': String,
-    'name': String,
-    'email': String
+    'type': Boolean,
+    'default': false
   },
   'facebook': {
-    'id': String,
-    'name': String,
-    'email': String
-  },
-  'twitter': {
-    'id': String,
-    'userName': String,
-    'name': String
-  },
-  'linkedin': {
-    'id': String,
-    'name': String,
-    'email': String
-  },
-  'github': {
-    'id': String,
-    'name': String,
-    'email': String
+    'type': Boolean,
+    'default': false
   }
 });
 
@@ -232,6 +215,26 @@ userSchema.statics.findUserByCredentials = function(email, password) {
       bcrypt.compare(password, user.password, (err, res) => {
         (res) ? resolve(user) : reject();
       });
+    });
+  });
+};
+
+/**
+ * model funtion to find user by using email and name for social logins
+ * function - required 'this'
+ * @param {String} email [user email]
+ * @param {String} name [user name]
+ */
+userSchema.statics.findUserBySocialCredentials = function(email) { 
+  const User = this;
+
+  return User.findOne({ email }).then((user) => {
+    return new Promise((resolve, reject) => {
+      if(!user) {
+        resolve();
+      } else {
+        resolve(user);
+      }
     });
   });
 };

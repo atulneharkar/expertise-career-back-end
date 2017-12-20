@@ -3,7 +3,9 @@ import express from 'express';
 /* all routes */
 import authenticationRoutes from './authenticate';
 import userRoutes from './user';
-import socialRoutes from './social-login';
+import courseRoutes from './course';
+import queryRoutes from './contact-us';
+import trendingRoutes from './trending';
 
 /* all common routes goes here */
 import commonRoutes from './common';
@@ -21,19 +23,32 @@ const routes = express.Router();
 routes.use('/user', authenticationRoutes);
 
 /**
- * all social login routes
- * GET /user/auth/google
- * GET /user/auth/facebook
- * GET /user/auth/twitter
- */
-routes.use('/user', socialRoutes);
-
-/**
  * all user routes
  * POST /user/create
  * PUT /user/update/:id
  */
-routes.use('/user', userRoutes);
+routes.use('/user', isAuthorizedUser, userRoutes);
+
+/**
+ * all course routes
+ * POST /course/create
+ * PUT /course/update/:id
+ */
+routes.use('/course', isAuthorizedUser, courseRoutes);
+
+/**
+ * all user queries routes
+ * POST /queries/add
+ * GET /queries/getall
+ */
+routes.use('/query', queryRoutes);
+
+/**
+ * all user trending routes
+ * POST /trending/add
+ * PUT /trending/update/:id
+ */
+routes.use('/trending', isAuthorizedUser, trendingRoutes);
 
 /**
  * all common routes goes here

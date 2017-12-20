@@ -11,12 +11,6 @@ import routes from './routes/';
 import dbConnection from './db/mongoose';
 import { corsOptions } from './config/cors';
 
-import passport from 'passport';
-import flash from 'connect-flash';
-import session from 'express-session';
-
-require('./config/passport.js')(passport)
-
 const app = express();
 const port = process.env.PORT || config.PORT;
 
@@ -37,12 +31,6 @@ app.use(bodyParser.urlencoded({ 'extended': false }));
 
 /* parse application/json */
 app.use(bodyParser.json());
-
-// required for passport
-app.use(session({ secret: config.AUTH_KEY })); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
                   
 // /* all application routes */
 app.use(routes);

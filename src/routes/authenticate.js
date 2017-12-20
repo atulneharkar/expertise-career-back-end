@@ -3,10 +3,13 @@ import express from 'express';
 /* all controllers */
 import {
   login,
+  loginSocial,
   logout,
   sendOTPLink,
   resetPassword
 } from '../controllers/authenticate';
+
+import { createUser } from '../controllers/user';
 
 /* all middleware */
 import { isAuthorizedUser } from '../middlewares/authenticate';
@@ -14,10 +17,22 @@ import { isAuthorizedUser } from '../middlewares/authenticate';
 const authenticationRoutes = express.Router();
 
 /**
+ * route to create a new user
+ * POST /user/create
+ */
+authenticationRoutes.post('/create', createUser);
+
+/**
  * user login
  * POST /user/login
  */
 authenticationRoutes.post('/login', login);
+
+/**
+ * user login
+ * POST /user/login
+ */
+authenticationRoutes.post('/login-social', loginSocial);
 
 /**
  * user logout
