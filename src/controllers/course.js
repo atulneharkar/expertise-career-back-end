@@ -20,7 +20,7 @@ export const createCourse = (req, res) => {
     'courseDate': req.body.courseDate,
     'slot': req.body.slot,
     'webinarLink': req.body.webinarLink,
-    'courseContentLink': req.body.courseContentLink,
+    'coursePrice': req.body.coursePrice,
     'registeredUsers': req.body.registeredUsers,
     'author': req.body.author
   }); 
@@ -68,6 +68,8 @@ export const getCourseList = (req, res) => {
  */
 export const getCourseByID = (req, res) => {
   Course.findById(req.params.id)
+    .populate('registeredUsers.user', USER_FIELDS_TO_POPULATE)
+    .populate('author', USER_FIELDS_TO_POPULATE)
     .then(course => {
       if(!course) {
         return Promise.reject({'status': 404});

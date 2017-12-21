@@ -33,7 +33,7 @@ courseRoutes.get('/list/:status', getCourseList);
  * route to get specific course's info
  * GET /course/:id
  */
-courseRoutes.get('/:id', isAuthorizedUser, getCourseByID);
+courseRoutes.get('/:id', getCourseByID);
 
 /**
  * route to update specific course

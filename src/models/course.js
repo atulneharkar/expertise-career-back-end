@@ -41,10 +41,10 @@ const courseSchema = new mongoose.Schema({
     'trim': true,
     //'required': [true, 'Please enter webinarLink'],
   },
-  'courseContentLink': {
+  'coursePrice': {
     'type': String,
     'trim': true,
-    //'required': [true, 'Please enter courseContentLink']
+    //'required': [true, 'Please enter coursePrice']
   },
   'registeredUsers': [{
     'user': {
