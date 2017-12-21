@@ -47,6 +47,8 @@ export const loginSocial = (req, res) => {
         return user.generateAuthToken();
       }).then((token) => {
         res.header('x-auth', token).send(user);
+      }).catch((e) => {console.log(e);
+        res.status(400).send(e);
       });
     } else if(user && user[body.loginType] === false) {
       const userID = user._id;
@@ -66,6 +68,8 @@ export const loginSocial = (req, res) => {
         return user.generateAuthToken();
       }).then((token) => {
         res.header('x-auth', token).send(user);
+      }).catch((e) => {
+        res.status(400).send(e);
       });
     } else {
       return user.generateAuthToken().then((token) => {

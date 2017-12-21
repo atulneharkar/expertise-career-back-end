@@ -5,6 +5,8 @@ import Course from '../models/course';
 import config from '../config/config';
 import redisClient from '../config/redis';
 
+export const USER_FIELDS_TO_POPULATE = '_id name email';
+
 /**
  * controller for create course
  * POST /course/create
@@ -14,17 +16,20 @@ export const createCourse = (req, res) => {
     'title': req.body.title,
     'description': req.body.description,
     'courseType': req.body.courseType,
-    'domain': req.body.domain,
-    'date': req.body.date,
+    'courseCategory': req.body.courseCategory,
+    'courseDate': req.body.courseDate,
     'slot': req.body.slot,
     'webinarLink': req.body.webinarLink,
     'courseContentLink': req.body.courseContentLink,
-    'RegisteredUsers': req.body.RegisteredUsers,
+    'registeredUsers': req.body.registeredUsers,
+    'author': req.body.author
   }); 
 
   course.save()
   .then(savedCourse => {
-    return Course.findById(savedCourse._id).populate('registeredUsers.user', USER_FIELDS_TO_POPULATE);
+    return Course.findById(savedCourse._id)
+      .populate('registeredUsers.user', USER_FIELDS_TO_POPULATE)
+      .populate('author', USER_FIELDS_TO_POPULATE);
   })
   .then(savedCourse => {
     res.status(200).send(savedCourse);
@@ -48,13 +53,31 @@ export const getCourseList = (req, res) => {
 
   Course.find(search)
   .populate('registeredUsers.user', USER_FIELDS_TO_POPULATE)
-  .populate('authorName', USER_FIELDS_TO_POPULATE)
+  .populate('author', USER_FIELDS_TO_POPULATE)
   .then(courses => {
     res.status(200).send(courses);
   })
   .catch(err => {
     res.status(400).send(err);
   });
+};
+
+/**
+ * controller to get specific course info
+ * GET /course/:id
+ */
+export const getCourseByID = (req, res) => {
+  Course.findById(req.params.id)
+    .then(course => {
+      if(!course) {
+        return Promise.reject({'status': 404});
+      }
+
+      res.status(200).send(course);
+    })
+    .catch(err => {
+      res.status(err.status || 400).send();
+    });
 };
 
 /**
@@ -70,7 +93,7 @@ export const updateCourse = (req, res) => {
     'context': 'query'
   })
   .populate('registeredUsers.user', USER_FIELDS_TO_POPULATE)
-  .populate('authorName', USER_FIELDS_TO_POPULATE)
+  .populate('author', USER_FIELDS_TO_POPULATE)
   .then(updatedCourse => {
     res.status(200).send(updatedCourse);
   })
@@ -85,8 +108,8 @@ export const updateCourse = (req, res) => {
  */
 export const removeCourse = (req, res) => {
   Course.findByIdAndRemove(req.params.id)
-  .then(() => {
-    res.status(200).send();
+  .then((course) => {
+    res.status(200).send(course);
   })
   .catch(err => {
     res.status(400).send(err);
@@ -99,11 +122,16 @@ export const removeCourse = (req, res) => {
  * POST /course/avatar
  */
 export const setCourseImage = (req, res) => {
-  const oldImagePath = req.course.courseImage;
+  let oldImagePath = null;
+  
+  Course.find({ _id: req.params.id })
+  .then(course => {
+    oldImagePath = course.avatar;
+  })
 
-  Course.findByIdAndUpdate(req.course._id, {
+  Course.findByIdAndUpdate(req.params.id, {
       '$set': {
-        'courseImage': `${config.API_URL}/uploads/courseImage/${req.file.filename}`
+        'courseImage': `${config.API_URL}/uploads/avatar/${req.file.filename}`
       }
     }, {
       'new': true

@@ -31,7 +31,6 @@ const userSchema = new mongoose.Schema({
   'phone': {
     'type': String,
     'trim': true,
-    'unique': [true, 'Phone number has already been used'],
     //'required': [true, 'Please enter your phone number'],
     'validate': {
       'isAsync': false,

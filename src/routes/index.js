@@ -34,7 +34,7 @@ routes.use('/user', isAuthorizedUser, userRoutes);
  * POST /course/create
  * PUT /course/update/:id
  */
-routes.use('/course', isAuthorizedUser, courseRoutes);
+routes.use('/course', courseRoutes);
 
 /**
  * all user queries routes
@@ -48,7 +48,7 @@ routes.use('/query', queryRoutes);
  * POST /trending/add
  * PUT /trending/update/:id
  */
-routes.use('/trending', isAuthorizedUser, trendingRoutes);
+routes.use('/trending', trendingRoutes);
 
 /**
  * all common routes goes here

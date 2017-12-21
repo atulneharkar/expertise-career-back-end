@@ -6,8 +6,11 @@ import {
   getTrendingList,
   updateTrending,
   setTrendingImage,
-  removeTrending
+  removeTrending,
+  getTrendingByID
 } from '../controllers/trending';
+
+import { isAuthorizedUser } from '../middlewares/authenticate';
 
 /* pic upload */
 import { avatarUpload } from '../helpers/upload';
@@ -18,7 +21,7 @@ const trendingRoutes = express.Router();
  * route to create a new trending
  * POST /trending/create
  */
-trendingRoutes.post('/create', createTrending);
+trendingRoutes.post('/create', isAuthorizedUser, createTrending);
 
 /**
  * route to get list of trending
@@ -27,21 +30,27 @@ trendingRoutes.post('/create', createTrending);
 trendingRoutes.get('/list/:status', getTrendingList);
 
 /**
+ * route to get specific trending's info
+ * GET /trending/:id
+ */
+trendingRoutes.get('/:id', isAuthorizedUser, getTrendingByID);
+
+/**
  * route to update specific trending
  * PUT /trending/:id
  */
-trendingRoutes.put('/:id', updateTrending);
+trendingRoutes.put('/:id', isAuthorizedUser, updateTrending);
 
 /**
  * route to delete existing trending
  * DELETE /trending/new
  */
-trendingRoutes.delete('/:id', setTrendingImage);
+trendingRoutes.delete('/:id', isAuthorizedUser, removeTrending);
 
 /**
  * route to set trending image
  * POST /trending/trendingImage
  */
-trendingRoutes.post('/trendingImage', avatarUpload, removeTrending);
+trendingRoutes.post('/trendingImage/:id', isAuthorizedUser, avatarUpload, setTrendingImage);
 
 export default trendingRoutes;

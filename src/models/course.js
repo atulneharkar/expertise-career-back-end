@@ -21,28 +21,21 @@ const courseSchema = new mongoose.Schema({
     'trim': true,
     //'required': [true, 'Please enter courseType'],
   },
-  'domain': {
+  'courseCategory': {
     'type': String,
     'trim': true,
-    //'required': [true, 'Please enter courseType'],
+    //'required': [true, 'Please enter courseCategory'],
   },
-  'date': {
+  'courseDate': {
     'type': String,
     'trim': true,
-    //'required': [true, 'Please enter date'],
+    //'required': [true, 'Please enter courseDate'],
   },
-  'slot': [{
-    'fromTime': {
-      'type': String,
-      'trim': true,
-      //'required': [true, 'Please enter from time'],
-    },
-    'toTime': {
-      'type': String,
-      'trim': true,
-      //'required': [true, 'Please enter to time'],
-    }
-  }],
+  'slot': {
+    'type': String,
+    'trim': true,
+    //'required': [true, 'Please enter slot'],
+  },
   'webinarLink': {
     'type': String,
     'trim': true,
@@ -59,7 +52,7 @@ const courseSchema = new mongoose.Schema({
       'ref': 'User'
     }
   }],
-  'authorName': {
+  'author': {
     'type': mongoose.Schema.Types.ObjectId,
     'ref': 'User'
   },

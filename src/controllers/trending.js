@@ -45,6 +45,24 @@ export const getTrendingList = (req, res) => {
 };
 
 /**
+ * controller to get specific trending info
+ * GET /trending/:id
+ */
+export const getTrendingByID = (req, res) => {
+  Trending.findById(req.params.id)
+    .then(trending => {
+      if(!trending) {
+        return Promise.reject({'status': 404});
+      }
+
+      res.status(200).send(trending);
+    })
+    .catch(err => {
+      res.status(err.status || 400).send();
+    });
+};
+
+/**
  * controller to update existing trending
  * PUT /trending/:id
  */
@@ -70,8 +88,8 @@ export const updateTrending = (req, res) => {
  */
 export const removeTrending = (req, res) => {
   Trending.findByIdAndRemove(req.params.id)
-  .then(() => {
-    res.status(200).send();
+  .then((trending) => {
+    res.status(200).send(trending);
   })
   .catch(err => {
     res.status(400).send(err);
@@ -84,11 +102,16 @@ export const removeTrending = (req, res) => {
  * POST /trending/avatar
  */
 export const setTrendingImage = (req, res) => {
-  const oldImagePath = req.course.trendingImage;
+  let oldImagePath = null;
+  
+  Trending.find({ _id: req.params.id })
+  .then(trending => {
+    oldImagePath = trending.avatar;
+  })
 
-  Trending.findByIdAndUpdate(req.trending._id, {
+  Trending.findByIdAndUpdate(req.params.id, {
       '$set': {
-        'trendingImage': `${config.API_URL}/uploads/trendingImage/${req.file.filename}`
+        'trendingImage': `${config.API_URL}/uploads/avatar/${req.file.filename}`
       }
     }, {
       'new': true
