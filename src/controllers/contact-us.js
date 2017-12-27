@@ -1,6 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
 import ContactUs from '../models/contact-us';
 import config from '../config/config';
 import redisClient from '../config/redis';
@@ -14,13 +11,34 @@ export const addUserQuery = (req, res) => {
     'name': req.body.name,
     'email': req.body.email,
     'phone': req.body.phone,
-    'description': req.body.description
+    'description': req.body.description,
+    'createdDate': new Date()
   }); 
 
   query.save().then(() => {
     res.send(query);
   }).catch((e) => {
     res.status(400).send(e);
+  });
+};
+
+/**
+ * controller to update existing query
+ * PUT /query/:id
+ */
+export const updateQuery = (req, res) => {
+  ContactUs.findByIdAndUpdate(req.params.id, {
+    '$set': req.body
+  }, {
+    'new': true,
+    'runValidators': true,
+    'context': 'query'
+  })
+  .then(updatedQuery => {
+    res.status(200).send(updatedQuery);
+  })
+  .catch(err => {
+    res.status(400).send(err);
   });
 };
 

@@ -27,7 +27,7 @@ const contactUsSchema = new mongoose.Schema({
     //'required': [true, 'Please enter date'],
   },
   'createdDate': {
-    'type': String
+    'type': Date
   },
   'queryStatus': {
     'type': String,

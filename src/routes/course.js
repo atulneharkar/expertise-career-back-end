@@ -7,7 +7,9 @@ import {
   updateCourse,
   setCourseImage,
   removeCourse,
-  getCourseByID
+  getCourseByID,
+  userCourse,
+  getMyCourseList
 } from '../controllers/course';
 
 import { isAuthorizedUser } from '../middlewares/authenticate';
@@ -30,6 +32,12 @@ courseRoutes.post('/create', isAuthorizedUser, createCourse);
 courseRoutes.get('/list/:status', getCourseList);
 
 /**
+ * route to get list of courses assigned to particular user
+ * GET /course/list/me/:userId 
+ */
+courseRoutes.get('/list/me/:userId', getMyCourseList);
+
+/**
  * route to get specific course's info
  * GET /course/:id
  */
@@ -40,6 +48,12 @@ courseRoutes.get('/:id', getCourseByID);
  * PUT /course/:id
  */
 courseRoutes.put('/:id', isAuthorizedUser, updateCourse);
+
+/**
+ * route to update assign course
+ * PUT /course/userCourse/:courseId/:userId/:action
+ */
+courseRoutes.put('/userCourse/:courseId/:userId/:action', isAuthorizedUser, userCourse);
 
 /**
  * route to delete existing course

@@ -1,7 +1,5 @@
-import fs from 'fs';
-import path from 'path';
-
 import Course from '../models/course';
+import User from '../models/user';
 import config from '../config/config';
 import redisClient from '../config/redis';
 
@@ -21,7 +19,6 @@ export const createCourse = (req, res) => {
     'slot': req.body.slot,
     'webinarLink': req.body.webinarLink,
     'coursePrice': req.body.coursePrice,
-    'registeredUsers': req.body.registeredUsers,
     'author': req.body.author
   }); 
 
@@ -52,8 +49,25 @@ export const getCourseList = (req, res) => {
   }
 
   Course.find(search)
-  .populate('registeredUsers.user', USER_FIELDS_TO_POPULATE)
+  .populate('registeredUsers', USER_FIELDS_TO_POPULATE)
   .populate('author', USER_FIELDS_TO_POPULATE)
+  .then(courses => {
+    res.status(200).send(courses);
+  })
+  .catch(err => {
+    res.status(400).send(err);
+  });
+};
+
+/**
+ * controller to get all/specific course
+ * GET /course/
+ * search all/id
+ */
+export const getMyCourseList = (req, res) => {
+  const userId = req.params.userId;
+console.log(userId);
+  Course.find({ 'registeredUsers': userId })
   .then(courses => {
     res.status(200).send(courses);
   })
@@ -116,6 +130,55 @@ export const removeCourse = (req, res) => {
   .catch(err => {
     res.status(400).send(err);
   });
+};
+
+/**
+ * controller to assign course to users
+ * PUT /course/userCourse/:courseId/:userId/:action
+ */
+export const userCourse = (req, res) => {
+  let courseId = req.params.courseId;
+  let userId = req.params.userId;
+  let action = req.params.action;
+  let registeredUsers = [];
+
+  Course.findById(courseId)
+    .then(course => {
+      if(!course) {
+        return Promise.reject({'status': 404});
+      }
+
+      if(course.registeredUsers.length > 0) {
+        registeredUsers = course.registeredUsers;
+        if(registeredUsers.indexOf(userId) == -1) {
+          if(action === 'add') {
+            registeredUsers.push(userId);
+          }
+        } else {
+          if(action === 'remove') {
+            registeredUsers.splice((registeredUsers.indexOf(userId)), 1);
+          }
+        }
+      } else {
+        if(action === 'add') {
+          registeredUsers.push(userId);
+        }
+      }
+
+      Course.findByIdAndUpdate(courseId, {
+        '$set': { registeredUsers }
+      }, {
+        'new': true,
+        'runValidators': true,
+        'context': 'query'
+      })
+      .then(updatedCourse => {
+        res.status(200).send(updatedCourse);
+      })
+    })
+    .catch(err => {
+      res.status(err.status || 400).send();
+    });
 };
 
 /**

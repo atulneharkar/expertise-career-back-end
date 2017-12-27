@@ -3,6 +3,7 @@ import express from 'express';
 /* all controllers */
 import {
   addUserQuery,
+  updateQuery,
 	getAllUserQueries
 } from '../controllers/contact-us';
 
@@ -16,6 +17,12 @@ const queryRoutes = express.Router();
  * POST /user/login
  */
 queryRoutes.post('/create', addUserQuery);
+
+/**
+ * route to update specific query
+ * PUT /query/:id
+ */
+queryRoutes.put('/:id', isAuthorizedUser, updateQuery);
 
 /**
  * route to get list of courses

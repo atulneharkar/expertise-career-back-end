@@ -47,10 +47,8 @@ const courseSchema = new mongoose.Schema({
     //'required': [true, 'Please enter coursePrice']
   },
   'registeredUsers': [{
-    'user': {
-      'type': mongoose.Schema.Types.ObjectId,
-      'ref': 'User'
-    }
+    'type': mongoose.Schema.Types.ObjectId,
+    'ref': 'User'
   }],
   'author': {
     'type': mongoose.Schema.Types.ObjectId,
