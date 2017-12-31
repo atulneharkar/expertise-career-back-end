@@ -35,10 +35,6 @@ app.use(bodyParser.json());
 // /* all application routes */
 app.use(routes);
 
-if(!module.parent){ 
-	app.listen(port, () => {
-	  console.log(`App started at port ${port}`);
-	});
-}
-
-module.exports = app;
+app.listen(3001, () => {
+  console.log(`App started at port 3001`);
+});
