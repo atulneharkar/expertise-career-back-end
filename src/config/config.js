@@ -2,13 +2,13 @@ import applicationPrivateConfig from './config.json';
 
 const applicationPublicConfig = {
   'development': {
-    "API_URL": "http://localhost:3000"
+    "API_URL": "http://localhost:3001"
   },
   "stage": {
-    "API_URL": "http://localhost:3000" 
+    "API_URL": "http://localhost:3001" 
   },
   'production': {
-    "API_URL": "http://localhost:3000" 
+    "API_URL": "http://localhost:3001" 
   }
 };
 
@@ -18,7 +18,7 @@ const applicationPublicConfig = {
  */
 const commonConfigAcrossAllEnv = {
   'OTP_EXPIRY_TIME': 2, /* in hours */
-  'REDIS_KEY': 'expertisecareer:' /* unique seperator to distinguish redis key */
+  'REDIS_KEY': 'skillunfold:' /* unique seperator to distinguish redis key */
 };
 
 /**
