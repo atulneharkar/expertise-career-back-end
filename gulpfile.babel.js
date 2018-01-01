@@ -19,7 +19,7 @@ gulp.task('default', ['set-dev-node-env'], cb => {
 
 /* production mode - gulp prod */
 gulp.task('prod', ['set-prod-node-env'], cb => {
-  run('build', 'watch', cb);
+  run('build', cb);
 });
 
 /* stage mode - gulp prod */
@@ -118,8 +118,8 @@ gulp.task('start-server', () => {
      * human-friendly format : it can be “10M”, “100K”, “2G” and so on…
      */
     pm2Config['max_memory_restart'] = '250M';
-    pm2Config['out_file'] = '/var/log/skill-unfold/app.stdout.log';
-    pm2Config['error_file'] = '/var/log/skill-unfold/app.stderr.log';
+   /* pm2Config['out_file'] = '/var/log/skill-unfold/app.stdout.log';
+    pm2Config['error_file'] = '/var/log/skill-unfold/app.stderr.log';*/
   }
 
   pm2.connect(true, failed => {
