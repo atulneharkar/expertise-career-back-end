@@ -2,13 +2,13 @@ import applicationPrivateConfig from './config.json';
 
 const applicationPublicConfig = {
   'development': {
-    "API_URL": "http://skillunfold.com:3001"
+    "API_URL": "https://skillunfold.com:8080"
   },
   "stage": {
-    "API_URL": "http://skillunfold.com:3001" 
+    "API_URL": "https://skillunfold.com:8080" 
   },
   'production': {
-    "API_URL": "http://skillunfold.com:3001" 
+    "API_URL": "https://skillunfold.com:8080" 
   }
 };
 

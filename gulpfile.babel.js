@@ -97,7 +97,7 @@ gulp.task('start-server', () => {
 
   /* Base Configuration [irrespective of the environment] */
   let pm2Config = {
-    'name': 'skill-unfold',
+    'name': 'skillunfold.com',
     'script': path.entry
   };
 
@@ -118,8 +118,8 @@ gulp.task('start-server', () => {
      * human-friendly format : it can be “10M”, “100K”, “2G” and so on…
      */
     pm2Config['max_memory_restart'] = '250M';
-   /* pm2Config['out_file'] = '/var/log/skill-unfold/app.stdout.log';
-    pm2Config['error_file'] = '/var/log/skill-unfold/app.stderr.log';*/
+    pm2Config['out_file'] = '/var/log/skillunfold.com/app.stdout.log';
+    pm2Config['error_file'] = '/var/log/skillunfold.com/app.stderr.log';
   }
 
   pm2.connect(true, failed => {
