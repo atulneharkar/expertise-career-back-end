@@ -11,9 +11,6 @@ import routes from './routes/';
 import dbConnection from './db/mongoose';
 import { corsOptions } from './config/cors';
 
-const https = require('https');
-const fs = require('fs');
-const path = require('path');
 const app = express();
 const port = process.env.PORT || config.PORT;
 
@@ -38,11 +35,6 @@ app.use(bodyParser.json());
 // /* all application routes */
 app.use(routes);
 
-const httpsOptions = {
-  cert: fs.readFileSync('/etc/letsencrypt/live/skillunfold.com/fullchain.pem'),
-  key: fs.readFileSync('/etc/letsencrypt/live/skillunfold.com/privkey.pem')
-}
-
-https.createServer(httpsOptions, app).listen(8080, () => {
-  console.log(`App started at port 8080`);
+app.listen(3001, () => {
+  console.log('App listening to port 3001');
 });
