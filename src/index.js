@@ -13,6 +13,7 @@ import { corsOptions } from './config/cors';
 
 const app = express();
 const port = process.env.PORT || config.PORT;
+const http = require('http');
 
 /* check for CORS */
 app.use(cors(corsOptions));
@@ -35,6 +36,5 @@ app.use(bodyParser.json());
 // /* all application routes */
 app.use(routes);
 
-app.listen(3001, () => {
-  console.log('App listening to port 3001');
-});
+http.createServer(app).listen(3001, 'localhost');
+
