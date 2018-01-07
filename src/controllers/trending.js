@@ -111,7 +111,7 @@ export const setTrendingImage = (req, res) => {
 
   Trending.findByIdAndUpdate(req.params.id, {
       '$set': {
-        'trendingImage': `${config.API_URL}/uploads/avatar/${req.file.filename}`
+        'trendingImage': `https://skillunfold.com/api/uploads/avatar/${req.file.filename}`
       }
     }, {
       'new': true

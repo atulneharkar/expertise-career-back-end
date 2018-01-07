@@ -196,7 +196,7 @@ export const setCourseImage = (req, res) => {
 
   Course.findByIdAndUpdate(req.params.id, {
       '$set': {
-        'courseImage': `${config.API_URL}/uploads/avatar/${req.file.filename}`
+        'courseImage': `https://skillunfold.com/api/uploads/avatar/${req.file.filename}`
       }
     }, {
       'new': true
