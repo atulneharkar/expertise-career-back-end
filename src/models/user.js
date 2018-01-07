@@ -22,32 +22,32 @@ const userSchema = new mongoose.Schema({
     'type': String,
     'trim': true,
     //'required': [true, 'Please enter your name'],
-    'validate': {
-      'isAsync': false,
-      'validator': isValidName,
-      'message': 'Please enter a valid name'
-    }
+    // 'validate': {
+    //   'isAsync': false,
+    //   'validator': isValidName,
+    //   'message': 'Please enter a valid name'
+    // }
   },
   'phone': {
     'type': String,
     'trim': true,
     //'required': [true, 'Please enter your phone number'],
-    'validate': {
-      'isAsync': false,
-      'validator': isValidPhoneNumber,
-      'message': 'Please enter a valid phone number'
-    }
+    // 'validate': {
+    //   'isAsync': false,
+    //   'validator': isValidPhoneNumber,
+    //   'message': 'Please enter a valid phone number'
+    // }
   },
   'email': {
     'type': String,
     'trim': true,
     'unique': [true, 'Email ID has already been used'],
     //'required': [true, 'Please enter your email ID'],
-    'validate': {
-      'isAsync': false,
-      'validator': isValidEmail,
-      'message': 'Please enter a valid email'
-    }
+    // 'validate': {
+    //   'isAsync': false,
+    //   'validator': isValidEmail,
+    //   'message': 'Please enter a valid email'
+    // }
   },
   'password': {
     'type': String,

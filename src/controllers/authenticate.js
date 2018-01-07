@@ -3,6 +3,8 @@ import _ from 'lodash';
 
 import User from '../models/user';
 import redisClient from '../config/redis';
+import smtpTransport from '../config/smtp.config';
+import { resetPasswordTemplate } from '../helpers/emailTemplate';
 
 /**
  * controller for user login
@@ -118,6 +120,20 @@ export const sendOTPLink = (req, res) => {
       return user.generateOTP();
     })
     .then(user => {
+      const userMailOptions = {
+        to : req.body.email,
+        subject : "Skillunfold.com - Password reset link info",
+        text : resetPasswordTemplate()
+      }
+
+      smtpTransport.sendMail(userMailOptions, function(error, response) {
+        if(error) {
+          console.log(error);
+        } else {
+          console.log("Message sent: " + response.message);
+        }
+      });
+
       res.status(200).send({
         'otp': user.otp,
         'userID': user._id

@@ -1,6 +1,8 @@
 import ContactUs from '../models/contact-us';
 import config from '../config/config';
 import redisClient from '../config/redis';
+import smtpTransport from '../config/smtp.config';
+import { userQueryTemplate, adminQueryTemplate } from '../helpers/emailTemplate';
 
 /**
  * controller for add user query
@@ -16,6 +18,34 @@ export const addUserQuery = (req, res) => {
   }); 
 
   query.save().then(() => {
+    const userMailOptions = {
+      to : req.body.email,
+      subject : "Skillunfold.com - Query recieved, admin will contact you shortly",
+      text : queryTemplate
+    }
+
+    smtpTransport.sendMail(userMailOptions, function(error, response) {
+      if(error) {
+        console.log(error);
+      } else {
+        console.log("Message sent: " + response.message);
+      }
+    });
+
+    const adminMailOptions = {
+      to : 'info.skillunfold@gmail.com',
+      subject : "Skillunfold.com - New user query submitted",
+      text : adminQueryTemplate(req.body.name, req.body.email, req.body.phone, req.body.description)
+    }
+
+    smtpTransport.sendMail(adminQueryTemplate, function(error, response) {
+      if(error) {
+        console.log(error);
+      } else {
+        console.log("Message sent: " + response.message);
+      }
+    });
+
     res.send(query);
   }).catch((e) => {
     res.status(400).send(e);

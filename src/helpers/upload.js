@@ -30,7 +30,7 @@ const avatarStorage = multer.diskStorage({
 export const avatarUpload = multer({
   'storage': avatarStorage,
   'limits': {
-    'fileSize': 3000000 /* in bytes 1000000b = 1mb*/
+    'fileSize': 5000000 /* in bytes 1000000b = 1mb*/
   },
   'onFileSizeLimit': file => {
     /* delete the partially written file */
