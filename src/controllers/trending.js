@@ -31,8 +31,8 @@ export const createTrending = (req, res) => {
 export const getTrendingList = (req, res) => {
   const search = {};
 
-  if(req.params.search && req.params.search !== 'all') {
-    search._id = req.params.search;
+  if(req.params.category && req.params.category !== 'all' && req.params.category !== 'All') {
+    search.trendingCategory = req.params.category;
   }
 
   Trending.find(search)

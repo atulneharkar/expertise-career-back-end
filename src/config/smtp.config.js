@@ -6,10 +6,11 @@ const nodemailer = require("nodemailer");
 */
 const smtpTransport = nodemailer.createTransport({
     service: "gmail",
+    port: 443,
     host: "smtp.gmail.com",
     auth: {
-        user: "",
-        pass: ""
+        user: "info.skillunfold@gmail.com",
+        pass: "Skun@2018"
     }
 });
 

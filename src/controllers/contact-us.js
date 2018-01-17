@@ -19,6 +19,7 @@ export const addUserQuery = (req, res) => {
 
   query.save().then(() => {
     const userMailOptions = {
+      from: 'info.skillunfold@gmail.com',
       to : req.body.email,
       subject : "Skillunfold.com - Query recieved, admin will contact you shortly",
       text : queryTemplate
@@ -33,6 +34,7 @@ export const addUserQuery = (req, res) => {
     });
 
     const adminMailOptions = {
+      from: 'info.skillunfold@gmail.com',
       to : 'info.skillunfold@gmail.com',
       subject : "Skillunfold.com - New user query submitted",
       text : adminQueryTemplate(req.body.name, req.body.email, req.body.phone, req.body.description)

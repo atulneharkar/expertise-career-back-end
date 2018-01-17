@@ -25,9 +25,9 @@ trendingRoutes.post('/create', isAuthorizedUser, createTrending);
 
 /**
  * route to get list of trending
- * GET /trending/list/:status [ux, vd, fe, be]
+ * GET /trending/list/:category [ux, vd, fe, be]
  */
-trendingRoutes.get('/list/:status', getTrendingList);
+trendingRoutes.get('/list/:category', getTrendingList);
 
 /**
  * route to get specific trending's info

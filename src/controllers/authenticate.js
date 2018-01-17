@@ -121,6 +121,7 @@ export const sendOTPLink = (req, res) => {
     })
     .then(user => {
       const userMailOptions = {
+        from: 'info.skillunfold@gmail.com',
         to : req.body.email,
         subject : "Skillunfold.com - Password reset link info",
         text : resetPasswordTemplate()
