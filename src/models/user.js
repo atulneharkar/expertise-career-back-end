@@ -86,7 +86,11 @@ const userSchema = new mongoose.Schema({
   'facebook': {
     'type': Boolean,
     'default': false
-  }
+  },
+  'registeredCourses': [{
+    'type': mongoose.Schema.Types.ObjectId,
+    'ref': 'Course'
+  }],
 });
 
 /**

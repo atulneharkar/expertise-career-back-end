@@ -66,8 +66,10 @@ export const getCourseList = (req, res) => {
  */
 export const getMyCourseList = (req, res) => {
   const userId = req.params.userId;
-console.log(userId);
+
   Course.find({ 'registeredUsers': userId })
+  .populate('registeredUsers', USER_FIELDS_TO_POPULATE)
+  .populate('author', USER_FIELDS_TO_POPULATE)
   .then(courses => {
     res.status(200).send(courses);
   })
@@ -82,7 +84,7 @@ console.log(userId);
  */
 export const getCourseByID = (req, res) => {
   Course.findById(req.params.id)
-    .populate('registeredUsers.user', USER_FIELDS_TO_POPULATE)
+    .populate('registeredUsers', USER_FIELDS_TO_POPULATE)
     .populate('author', USER_FIELDS_TO_POPULATE)
     .then(course => {
       if(!course) {
@@ -108,7 +110,7 @@ export const updateCourse = (req, res) => {
     'runValidators': true,
     'context': 'query'
   })
-  .populate('registeredUsers.user', USER_FIELDS_TO_POPULATE)
+  .populate('registeredUsers', USER_FIELDS_TO_POPULATE)
   .populate('author', USER_FIELDS_TO_POPULATE)
   .then(updatedCourse => {
     res.status(200).send(updatedCourse);
@@ -139,8 +141,6 @@ export const removeCourse = (req, res) => {
 export const userCourse = (req, res) => {
   let courseId = req.params.courseId;
   let userId = req.params.userId;
-  let action = req.params.action;
-  let registeredUsers = [];
 
   Course.findById(courseId)
     .then(course => {
@@ -148,32 +148,28 @@ export const userCourse = (req, res) => {
         return Promise.reject({'status': 404});
       }
 
-      if(course.registeredUsers.length > 0) {
-        registeredUsers = course.registeredUsers;
-        if(registeredUsers.indexOf(userId) == -1) {
-          if(action === 'add') {
-            registeredUsers.push(userId);
-          }
-        } else {
-          if(action === 'remove') {
-            registeredUsers.splice((registeredUsers.indexOf(userId)), 1);
-          }
-        }
-      } else {
-        if(action === 'add') {
-          registeredUsers.push(userId);
-        }
-      }
-
       Course.findByIdAndUpdate(courseId, {
-        '$set': { registeredUsers }
+        '$push': {
+          registeredUsers: userId
+        }
       }, {
         'new': true,
         'runValidators': true,
         'context': 'query'
       })
       .then(updatedCourse => {
-        res.status(200).send(updatedCourse);
+        User.findByIdAndUpdate(userId, {
+          '$push': {
+            registeredCourses: courseId
+          }
+        }, {
+          'new': true,
+          'runValidators': true,
+          'context': 'query'
+        })
+        .then(updatedUser => {
+          res.status(200).send(updatedCourse);
+        })
       })
     })
     .catch(err => {

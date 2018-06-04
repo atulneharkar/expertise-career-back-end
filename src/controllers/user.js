@@ -58,6 +58,7 @@ export const getUserList = (req, res) => {
   };
 
   User.find(filter)
+  .populate('registeredCourses')
     .then(list => {
       if(!list) {
         return Promise.reject({'status': 404});

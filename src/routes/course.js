@@ -51,9 +51,9 @@ courseRoutes.put('/:id', isAuthorizedUser, updateCourse);
 
 /**
  * route to update assign course
- * PUT /course/userCourse/:courseId/:userId/:action
+ * PUT /course/userCourse/:courseId/:userId
  */
-courseRoutes.put('/userCourse/:courseId/:userId/:action', isAuthorizedUser, userCourse);
+courseRoutes.put('/userCourse/:courseId/:userId', isAuthorizedUser, userCourse);
 
 /**
  * route to delete existing course
